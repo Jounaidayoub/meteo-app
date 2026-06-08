@@ -1,0 +1,6 @@
+{
+  "name": "Meteo App",
+  "description": "A minimalist, clean weather application utilizing Angular Signals, Tailwind CSS, and the Open-Meteo API.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
