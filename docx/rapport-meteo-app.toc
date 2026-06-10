@@ -48,7 +48,11 @@
 \contentsline {section}{\numberline {5}Persistance des donnees}{20}{section.5}%
 \contentsline {section}{\numberline {6}Rendu cote serveur (SSR)}{21}{section.6}%
 \contentsline {section}{\numberline {7}Tests unitaires}{22}{section.7}%
-\contentsline {section}{\numberline {8}Conclusion}{23}{section.8}%
-\contentsline {subsection}{\numberline {8.1}Bilan technique}{23}{subsection.8.1}%
-\contentsline {subsection}{\numberline {8.2}Defis techniques}{23}{subsection.8.2}%
-\contentsline {subsection}{\numberline {8.3}Perspectives}{23}{subsection.8.3}%
+\contentsline {section}{\numberline {8}Demonstration}{23}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Page d'accueil et recherche}{23}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Previsions detaillees}{23}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Comparaison de villes}{24}{subsection.8.3}%
+\contentsline {section}{\numberline {9}Conclusion}{26}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Bilan technique}{26}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Defis techniques}{26}{subsection.9.2}%
+\contentsline {subsection}{\numberline {9.3}Perspectives}{26}{subsection.9.3}%

@@ -24,7 +24,7 @@
 % ── Page style ────────────────────────────────────────────────────────
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\footnotesize\textit{Meteo App — Rapport de projet Angular}}
+\fancyhead[L]{\footnotesize\textit{Météo App — Rapport de projet Angular}}
 \fancyhead[R]{\footnotesize\textbf{\thepage}}
 \renewcommand{\headrulewidth}{0.4pt}
 
@@ -88,30 +88,30 @@
 \begin{center}
 \vspace*{2cm}
 
-{\large \textbf{Universite Hassan II}}\\[0.5cm]
-{\large Faculte des sciences et techniques de Mohammedia}\\[0.5cm]
-{\large Filiere ILISI}\\[2cm]
+{\large \textbf{Université Hassan II}}\\[0.5cm]
+{\large Faculté des sciences et techniques de Mohammedia}\\[0.5cm]
+{\large Filière ILISI}\\[2cm]
 
-{\Huge \textbf{Meteo App}}\\[0.3cm]
+{\Huge \textbf{Météo App}}\\[0.3cm]
 {\Large \textbf{Application de Visualisation}}\\[0.1cm]
-{\Large \textbf{et de Previsions Meteorologiques}}\\[1cm]
+{\Large \textbf{et de Prévisions Météorologiques}}\\[1cm]
 
 {\large Rapport de projet}\\[0.2cm]
-{\large Module : Developpement Full Stack Moderne}\\[0.2cm]
-{\large Encadre par : Pr. Chakri Sanae}\\[2cm]
+{\large Module : Développement Full Stack Moderne}\\[0.2cm]
+{\large Encadré par : Pr. Chakri Sanae}\\[2cm]
 
 \vfill
 
 \begin{minipage}[t]{0.45\textwidth}
 \centering
-\textbf{Realise par :}\\[0.3cm]
+\textbf{Réalisé par :}\\[0.3cm]
 Bichri Yasser\\[0.1cm]
 Jounaid Ayoub
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.45\textwidth}
 \centering
-\textbf{Annee universitaire :}\\[0.3cm]
+\textbf{Année universitaire :}\\[0.3cm]
 2025 / 2026
 \end{minipage}
 
@@ -128,7 +128,7 @@ Jounaid Ayoub
 \begin{center}
 \fbox{\parbox{0.85\textwidth}{\centering
 \vspace{0.3cm}
-Meteo App est une application Angular 21 complete qui illustre la mise en oeuvre des composants standalone, des Signals pour la gestion d'etat reactive, des formulaires reactifs, du routage parametre, du rendu SSR, et de l'integration d'API REST. L'application offre une experience utilisateur riche avec des visualisations SVG animees, une recherche de villes reactive, et une comparaison de donnees meteorologiques en temps reel.
+Météo App est une application Angular 21 complète qui illustre la mise en œuvre des composants standalone, des Signals pour la gestion d'état réactive, des formulaires réactifs, du routage paramétré, du rendu SSR, et de l'intégration d'API REST. L'application offre une expérience utilisateur riche avec des visualisations SVG animées, une recherche de villes réactive, et une comparaison de données météorologiques en temps réel.
 \vspace{0.3cm}
 }}
 \end{center}
@@ -136,7 +136,7 @@ Meteo App est une application Angular 21 complete qui illustre la mise en oeuvre
 \vfill
 
 \begin{center}
-\textbf{Mots-cles :} Angular 21, Signals, TypeScript, Tailwind CSS, SSR, Open-Meteo, SVG, Application meteo, Composants standalone.
+\textbf{Mots-clés :} Angular 21, Signals, TypeScript, Tailwind CSS, SSR, Open-Meteo, SVG, Application meteo, Composants standalone.
 \end{center}
 
 \newpage
@@ -148,18 +148,18 @@ Meteo App est une application Angular 21 complete qui illustre la mise en oeuvre
 \section{Introduction}
 \label{sec:intro}
 
-\subsection{Presentation du projet}
+\subsection{Présentation du projet}
 
-Meteo App est une application web de visualisation meteorologique developpee avec Angular 21 dans le cadre du module \og{}Developpement Full Stack Moderne\fg{}. Elle permet a l'utilisateur de consulter les conditions meteorologiques actuelles, les previsions horaires sur 24~h, les tendances sur cinq jours avec un graphique dynamique, la qualite de l'air, et de comparer les donnees de deux villes cote-a-cote.
+Météo App est une application web de visualisation météorologique développée avec Angular 21 dans le cadre du module \og{}Developpement Full Stack Moderne\fg{}. Elle permet à l'utilisateur de consulter les conditions météorologiques actuelles, les prévisions horaires sur 24~h, les tendances sur cinq jours avec un graphique dynamique, la qualité de l'air, et de comparer les données de deux villes côte-à-côte.
 
-L'application exploite les API publiques d'Open-Meteo pour les donnees meteorologiques et de geocodage, ainsi que Nominatim (OpenStreetMap) pour le geocodage inverse. Le c\oe ur du projet resider dans l'architecture Angular : composants standalone, gestion d'etat reactive avec les Signals, formulaires reactifs, routage parametre, et rendu cote serveur.
+L'application exploite les API publiques d'Open-Meteo pour les données météorologiques et de géocodage, ainsi que Nominatim (OpenStreetMap) pour le géocodage inverse. Le c\oe ur du projet réside dans l'architecture Angular : composants standalone, gestion d'état réactive avec les Signals, formulaires réactifs, routage paramétré, et rendu côté serveur.
 
-\subsection{Technologies utilisees}
+\subsection{Technologies utilisées}
 
 \begin{itemize}[nosep]
     \item \textbf{Framework} : Angular 21 (standalone API, plus de NgModules)
     \item \textbf{Langage} : TypeScript 5.9
-    \item \textbf{Gestion d'etat} : Angular Signals (\texttt{signal()}, \texttt{computed()})
+    \item \textbf{Gestion d'état} : Angular Signals (\texttt{signal()}, \texttt{computed()})
     \item \textbf{HTTP} : \texttt{HttpClient} d'Angular avec RxJS
     \item \textbf{Routage} : \texttt{Router} Angular (routes standalone)
     \item \textbf{Formulaires} : \texttt{ReactiveFormsModule} (\texttt{FormControl})
@@ -170,21 +170,21 @@ L'application exploite les API publiques d'Open-Meteo pour les donnees meteorolo
     \item \textbf{API externes} : Open-Meteo, Nominatim
 \end{itemize}
 
-\subsection{Fonctionnalites de l'application}
+\subsection{Fonctionnalités de l'application}
 
 \begin{itemize}[nosep]
-    \item Recherche de villes avec autocompletion et debounce
-    \item Affichage des conditions meteorologiques actuelles (temperature, humidite, vent)
-    \item Previsions horaires sur 24~h avec defilement horizontal
-    \item Graphique SVG anime des temperatures sur 5~jours
-    \item Indice de qualite de l'air (AQI) avec code couleur
+    \item Recherche de villes avec autocomplétion et debounce
+    \item Affichage des conditions météorologiques actuelles (température, humidité, vent)
+    \item Prévisions horaires sur 24~h avec défilement horizontal
+    \item Graphique SVG animé des températures sur 5~jours
+    \item Indice de qualité de l'air (AQI) avec code couleur
     \item Comparaison de deux villes avec tableau et cartes jour par jour
     \item Gestion des favoris avec persistance locale
-    \item Historique des dernieres recherches
-    \item Geolocalisation automatique
+    \item Historique des dernières recherches
+    \item Géolocalisation automatique
     \item Bascule entre Celsius et Fahrenheit
     \item Mode sombre
-    \item Resume textuel des conditions meteorologiques
+    \item Résumé textuel des conditions météorologiques
 \end{itemize}
 
 % ──────────────────────────────────────────────────────────────────────
@@ -227,12 +227,12 @@ export const routes: Routes = [
 
 Le routeur distingue trois vues principales :
 \begin{itemize}[nosep]
-    \item \textbf{Tableau de bord} (\texttt{/}) — page d'accueil avec la meteo actuelle, les previsions horaires et la qualite de l'air
+    \item \textbf{Tableau de bord} (\texttt{/}) — page d'accueil avec la meteo actuelle, les prévisions horaires et la qualité de l'air
     \item \textbf{Previsions detaillees} (\texttt{/forecast/:lat/:lon/:name}) — graphique SVG et cartes sur 5~jours, accessible depuis le bouton \og{}Voir les previsions\fg{} du tableau de bord
     \item \textbf{Comparaison} (\texttt{/compare}) — comparaison de deux villes avec presets
 \end{itemize}
 
-La route \texttt{forecast} utilise \texttt{ActivatedRoute.paramMap} pour extraire les parametres dynamiques (latitude, longitude, nom). Elle est configuree en mode \texttt{RenderMode.Server} pour le SSR afin que les coordonnees dynamiques soient correctement rendues.
+La route \texttt{forecast} utilise \texttt{ActivatedRoute.paramMap} pour extraire les paramètres dynamiques (latitude, longitude, nom). Elle est configuree en mode \texttt{RenderMode.Server} pour le SSR afin que les coordonnees dynamiques soient correctement rendues.
 
 \subsection{Composants et service partage}
 
@@ -246,7 +246,7 @@ Tous les composants partagent un unique service \texttt{WeatherManager}, injecte
     \item Le composant appelle une methode du \texttt{WeatherManager}
     \item Le service effectue une requete HTTP vers une API externe
     \item Les donnees recues mettent a jour un \texttt{signal()}
-    \item Angular detecte le changement via sa detection de changements \texttt{OnPush} et re-rend la vue
+    \item Angular detecte le changement via sa détection de changements \texttt{OnPush} et re-rend la vue
 \end{enumerate}
 }}
 \end{center}
@@ -286,7 +286,7 @@ La figure~\ref{fig:architecture} illustre l'architecture globale de l'applicatio
 \node[labelnode] (l3) at (-0.5, 1.8) {Couche API (externe)};
 
 % ── Layer 1: Components ──
-\node[comp, fill=blue!60!cyan!80] (dashboard) at (-3.8, 6.6) {Dashboard\\\footnotesize\normalfont meteo actuelle\\\footnotesize\normalfont previsions horaires\\\footnotesize\normalfont AQI};
+\node[comp, fill=blue!60!cyan!80] (dashboard) at (-3.8, 6.6) {Dashboard\\\footnotesize\normalfont meteo actuelle\\\footnotesize\normalfont prévisions horaires\\\footnotesize\normalfont AQI};
 \node[comp, fill=blue!60!cyan!80] (forecast)   at (0, 6.6)   {Forecast\\\footnotesize\normalfont graphique SVG\\\footnotesize\normalfont cartes 5 jours};
 \node[comp, fill=blue!60!cyan!80] (compare)    at (3.8, 6.6) {Compare\\\footnotesize\normalfont deux villes\\\footnotesize\normalfont tableaux/cartes};
 
@@ -322,18 +322,18 @@ La figure~\ref{fig:architecture} illustre l'architecture globale de l'applicatio
 \draw[arrow, dashed] (geo.south)   -- ++(0,-0.4) -- ++(4.2,0) |- (service.south);
 
 \end{tikzpicture}
-\caption{Architecture de l'application Meteo App}
+\caption{Architecture de l'application Météo App}
 \label{fig:architecture}
 \end{figure}
 
 % ──────────────────────────────────────────────────────────────────────
 \newpage
-\section{Le service WeatherManager et la gestion d'etat}
+\section{Le service WeatherManager et la gestion d'état}
 \label{sec:service}
 
-\subsection{Presentation du service}
+\subsection{Présentation du service}
 
-Le \texttt{WeatherManager} est le c\oe ur metier de l'application. Declare avec \texttt{providedIn: 'root'}, il agit comme un singleton et centralise toute la logique : appels API, gestion des signaux, persistance \texttt{localStorage}, et transformations de donnees.
+Le \texttt{WeatherManager} est le c\oe ur metier de l'application. Déclaré avec \texttt{providedIn: 'root'}, il agit comme un singleton et centralise toute la logique : appels API, gestion des signaux, persistance \texttt{localStorage}, et transformations de données.
 
 \begin{lstlisting}[style=angular, caption={Declaration et signaux du service}]
 @Injectable({ providedIn: 'root' })
@@ -341,7 +341,7 @@ export class WeatherManager {
   private http = inject(HttpClient);
 
   // Signaux d'etat
-  readonly temperatureUnit   = signal<'C' | 'F'>('C');
+  readonly températureUnit   = signal<'C' | 'F'>('C');
   readonly isDarkMode        = signal<boolean>(false);
   readonly currentCity       = signal<City>(defaultCity);
   readonly weatherData       = signal<WeatherData | null>(null);
@@ -359,15 +359,15 @@ export class WeatherManager {
 }
 \end{lstlisting}
 
-\subsection{Angular Signals : une gestion d'etat reactive}
+\subsection{Angular Signals : une gestion d'état réactive}
 
-L'application utilise exclusivement les \texttt{Signal}s pour la gestion d'etat. Ce choix permet :
+L'application utilise exclusivement les \texttt{Signal}s pour la gestion d'état. Ce choix permet :
 
 \begin{itemize}[nosep]
-    \item Une \textbf{reactivite fine} : Angular detecte precisement quel signal a change et ne re-verifie que le fragment du template concerne
-    \item Une \textbf{gestion simplifiee} : pas de \texttt{BehaviorSubject}, \texttt{async pipe} ou \texttt{Subscription} a gerer pour l'etat local
-    \item Une \textbf{performance accrue} grace au nouveau systeme de detection de changements
-    \item \textbf{Aucune desinscription manuelle} : contrairement aux abonnements RxJS, les signaux ne necessitent pas de \texttt{ngOnDestroy}
+    \item Une \textbf{réactivité fine} : Angular détecte précisément quel signal a change et ne re-vérifie que le fragment du template concerné
+    \item Une \textbf{gestion simplifiée} : pas de \texttt{BehaviorSubject}, \texttt{async pipe} ou \texttt{Subscription} à gérer pour l'état local
+    \item Une \textbf{performance accrue} grace au nouveau systeme de détection de changements
+    \item \textbf{Aucune désinscription manuelle} : contrairement aux abonnements RxJS, les signaux ne nécessitent pas de \texttt{ngOnDestroy}
 \end{itemize}
 
 \subsection{Diagramme de flux de donnees}
@@ -423,9 +423,9 @@ La figure~\ref{fig:dataflow} illustre le parcours complet d'une interaction util
 \label{fig:dataflow}
 \end{figure}
 
-\subsection{Signal calcule (computed)}
+\subsection{Signal calculé (computed)}
 
-Le signal derive \texttt{chartData} se recalcule automatiquement des que \texttt{weatherData} change :
+Le signal dérivé \texttt{chartData} se recalcule automatiquement dès que \texttt{weatherData} change :
 
 \begin{lstlisting}[style=angular, caption={Signal computed pour les coordonnees du graphique}]
 readonly chartData = computed(() => {
@@ -435,20 +435,20 @@ readonly chartData = computed(() => {
 });
 \end{lstlisting}
 
-Ce mecanisme garantit que les coordonnees SVG du graphique sont toujours synchronisees avec les donnees sans intervention manuelle.
+Ce mécanisme garantit que les coordonnées SVG du graphique sont toujours synchronisées avec les donnees sans intervention manuelle.
 
-\subsection{Gestion des appels API paralleles}
+\subsection{Gestion des appels API parallèles}
 
-La methode \texttt{configWeather()} illustre le chargement parallèle de deux API via \texttt{forkJoin} :
+La méthode \texttt{configWeather()} illustre le chargement parallèle de deux API via \texttt{forkJoin} :
 
-\begin{lstlisting}[style=angular, caption={Chargement parallele des API meteo et qualite de l'air}]
+\begin{lstlisting}[style=angular, caption={Chargement parallele des API meteo et qualité de l'air}]
 configWeather(city: City): Observable<WeatherData> {
   const params = `latitude=${city.latitude}
                   &longitude=${city.longitude}`;
 
   const weather$ = this.http.get<OpenMeteoResponse>(
     `https://api.open-meteo.com/v1/forecast?${params}
-     &current=temperature_2m,relative_humidity_2m,...`
+     &current=température_2m,relative_humidity_2m,...`
   );
 
   const aqi$ = this.http.get<AqiApiResponse>(
@@ -462,18 +462,18 @@ configWeather(city: City): Observable<WeatherData> {
 }
 \end{lstlisting}
 
-Le \texttt{catchError(() => of(null))} sur l'API AQI est un choix delibere : si la qualite de l'air est indisponible, l'application continue de fonctionner et affiche simplement les donnees meteorologiques.
+Le \texttt{catchError(() => of(null))} sur l'API AQI est un choix délibéré : si la qualité de l'air est indisponible, l'application continue de fonctionner et affiche simplement les données météorologiques.
 
 % ──────────────────────────────────────────────────────────────────────
 \newpage
-\section{Fonctionnalites detaillees}
+\section{Fonctionnalités détaillées}
 \label{sec:features}
 
-\subsection{Recherche de villes avec autocompletion}
+\subsection{Recherche de villes avec autocomplétion}
 
 \subsubsection{Mecanisme}
 
-La recherche de villes est implementee dans le composant \texttt{Dashboard} via un \texttt{FormControl} reactif. Le mecanisme repose sur une combinaison d'operateurs RxJS :
+La recherche de villes est implémentée dans le composant \texttt{Dashboard} via un \texttt{FormControl} reactif. Le mecanisme repose sur une combinaison d'opérateurs RxJS :
 
 \begin{lstlisting}[style=angular, caption={Autocompletion avec debounce et switchMap}]
 ngOnInit() {
@@ -494,20 +494,20 @@ ngOnInit() {
 }
 \end{lstlisting}
 
-\subsubsection{Le role du switchMap}
+\subsubsection{Le rôle du switchMap}
 
-L'operateur \texttt{switchMap} est essentiel : si l'utilisateur continue de taper avant que la requete ne revienne, il annule automatiquement la requete precedente et en emet une nouvelle. Cela evite :
+L'opérateur \texttt{switchMap} est essentiel : si l'utilisateur continue de taper avant que la requete ne revienne, il annule automatiquement la requête précédente et en émet une nouvelle. Cela evite :
 \begin{itemize}[nosep]
     \item Les appels API superflus
-    \item Les \emph{race conditions} (affichage de suggestions pour une ancienne requete)
-    \item La congestion reseau
+    \item Les \emph{race conditions} (affichage de suggestions pour une ancienne requête)
+    \item La congestion réseau
 \end{itemize}
 
 \subsubsection{Appel API}
 
-La methode \texttt{searchCities()} interroge l'API de geocodage d'Open-Meteo :
+La méthode \texttt{searchCities()} interroge l'API de géocodage d'Open-Meteo :
 
-\begin{lstlisting}[style=angular, caption={Requete de geocodage}]
+\begin{lstlisting}[style=angular, caption={Requete de géocodage}]
 searchCities(query: string): Observable<City[]> {
   return this.http.get<SearchResultItem>(
     `https://geocoding-api.open-meteo.com/v1/search
@@ -526,7 +526,7 @@ searchCities(query: string): Observable<City[]> {
 }
 \end{lstlisting}
 
-Les resultats sont affiches dans un panneau deroulant positionne en absolu sous le champ de saisie. Chaque suggestion est cliquable et declenche \texttt{selectCity()} :
+Les résultats sont affichés dans un panneau déroulant positionné en absolu sous le champ de saisie. Chaque suggestion est cliquable et déclénche \texttt{selectCity()} :
 
 \begin{lstlisting}[style=angular, caption={Selection d'une ville suggeree}]
 selectSuggestedCity(city: City) {
@@ -536,29 +536,29 @@ selectSuggestedCity(city: City) {
 }
 \end{lstlisting}
 
-Ce meme mecanisme est duplique dans le composant \texttt{Compare} pour les deux champs de recherche (Ville A et Ville B) de maniere independante.
+Ce meme mécanisme est dupliqué dans le composant \texttt{Compare} pour les deux champs de recherche (Ville A et Ville B) de manière indépendante.
 
 \newpage
-\subsection{Previsions horaires (Hourly Forecast)}
+\subsection{Prévisions horaires (Hourly Forecast)}
 
-\subsubsection{Recuperation des donnees}
+\subsubsection{Récupération des données}
 
-Les previsions horaires sont incluses dans la requete principale a l'API Open-Meteo Forecast. Le parametre \texttt{hourly} demande les donnees heure par heure :
+Les prévisions horaires sont incluses dans la requête principale a l'API Open-Meteo Forecast. Le paramètre \texttt{hourly} demande les données heure par heure :
 
 \begin{lstlisting}[style=angular, caption={Parametres de la requete horaire}]
-&hourly=temperature_2m,
+&hourly=température_2m,
        precipitation_probability,
        weather_code,
        wind_speed_10m
 \end{lstlisting}
 
-L'API retourne 24~valeurs (une par heure) pour chaque champ, stockees dans \texttt{data.hourly} sous forme de tableau \texttt{HourlyForecast[]}.
+L'API retourne 24~valeurs (une par heure) pour chaque champ, stockées dans \texttt{data.hourly} sous forme de tableau \texttt{HourlyForecast[]}.
 
 \subsubsection{Affichage dans le template}
 
-Le template utilise une boucle \texttt{@for} avec defilement horizontal :
+Le template utilise une bouclé \texttt{@for} avec défilement horizontal :
 
-\begin{lstlisting}[style=angular, caption={Template du bloc des previsions horaires}]
+\begin{lstlisting}[style=angular, caption={Template du bloc des prévisions horaires}]
 @if (data.hourly.length > 0) {
   <div class="p-6 md:p-8 bg-white border-b border-slate-100">
     <h3>Hourly Forecast</h3>
@@ -572,7 +572,7 @@ Le template utilise une boucle \texttt{@for} avec defilement horizontal :
           <span class="material-icons {{ hCond.textColor }}">
             {{ hCond.icon }}
           </span>
-          <span>{{ formatTemp(hour.temperature, ...) }}</span>
+          <span>{{ formatTemp(hour.température, ...) }}</span>
           @if (hour.precipitationProbability > 0) {
             <span>{{ hour.precipitationProbability }}%</span>
           }
@@ -583,26 +583,26 @@ Le template utilise une boucle \texttt{@for} avec defilement horizontal :
 }
 \end{lstlisting}
 
-\subsubsection{Details d'implementation}
+\subsubsection{Détails d'implémentation}
 
 Plusieurs aspects techniques sont a noter :
 
 \begin{itemize}[nosep]
-    \item \textbf{Defilement horizontal} : la classe \texttt{overflow-x-auto} permet le scroll, et \texttt{scrollbar-thin} est un style personnalise defini dans \texttt{styles.css}
-    \item \textbf{\texttt{shrink-0}} : chaque carte horaire conserve sa largeur minimale (\texttt{min-w-[64px]}) sans etre compressee
-    \item \textbf{Icones dynamiques} : la fonction \texttt{getCond()} traduit le code meteorologique WMO en icone Material et couleur via l'objet \texttt{WeatherCondition}
-    \item \textbf{Probabilite de precipitation} : affichee uniquement si superieure a 0\%, pour ne pas surcharger l'interface
+    \item \textbf{Défilement horizontal} : la classe \texttt{overflow-x-auto} permet le scroll, et \texttt{scrollbar-thin} est un style personnalisé défini dans \texttt{styles.css}
+    \item \textbf{\texttt{shrink-0}} : chaque carte horaire conserve sa largeur minimale (\texttt{min-w-[64px]}) sans etre compressée
+    \item \textbf{Icones dynamiques} : la fonction \texttt{getCond()} traduit le code meteorologique WMO en icône Material et couleur via l'objet \texttt{WeatherCondition}
+    \item \textbf{Probabilité de précipitation} : affichée uniquement si supérieure à 0\%, pour ne pas surcharger l'interface
 \end{itemize}
 
-\subsection{Graphique des temperatures sur 5~jours}
+\subsection{Graphique des températures sur 5~jours}
 
 \subsubsection{Principe general}
 
-Le composant \texttt{Forecast} genere un graphique SVG inline montrant l'evolution des temperatures maximales (rouge) et minimales (bleu) sur 5~jours. Ce graphique est entierement calcule et dessine en TypeScript, sans bibliotheque de charting externe.
+Le composant \texttt{Forecast} genere un graphique SVG inline montrant l'evolution des températures maximales (rouge) et minimales (bleu) sur 5~jours. Ce graphique est entierement calcule et dessine en TypeScript, sans bibliotheque de charting externe.
 
 \subsubsection{Calcul des coordonnees}
 
-La methode \texttt{computeChartCoordinates()} transforme les donnees numeriques en coordonnees pixels :
+La méthode \texttt{computeChartCoordinates()} transforme les donnees numeriques en coordonnees pixels :
 
 \begin{lstlisting}[style=angular, caption={Calcul des coordonnees SVG}]
 private computeChartCoordinates(list: DailyForecast[]) {
@@ -638,10 +638,10 @@ private computeChartCoordinates(list: DailyForecast[]) {
 
 Le SVG est construit avec les elements suivants :
 \begin{itemize}[nosep]
-    \item \textbf{Grille} : lignes horizontales en pointilles (\texttt{stroke-dasharray}) pour les reperes de temperature
-    \item \textbf{Lignes de temperature} : chemins \texttt{<path>} rouges (max) et bleus (min) avec une epaisseur de 3px
+    \item \textbf{Grille} : lignes horizontales en pointilles (\texttt{stroke-dasharray}) pour les reperes de température
+    \item \textbf{Lignes de température} : chemins \texttt{<path>} rouges (max) et bleus (min) avec une epaisseur de 3px
     \item \textbf{Aires remplies} : zones sous les courbes avec un degrade (\texttt{<linearGradient>}) rose et bleu
-    \item \textbf{Points de donnees} : cercles \texttt{<circle>} blancs avec bordure coloree
+    \item \textbf{Points de donnees} : cerclés \texttt{<circlé>} blancs avec bordure coloree
     \item \textbf{Etiquettes} : textes \texttt{<text>} pour les valeurs et les noms de jours
 \end{itemize}
 
@@ -658,7 +658,7 @@ animateChart() {
   this.chartDashoffset = String(length);
 
   requestAnimationFrame(() => {
-    this.chartDashoffset = '0';  // Declenche l'animation
+    this.chartDashoffset = '0';  // Declénche l'animation
   });
 }
 \end{lstlisting}
@@ -668,7 +668,7 @@ Le principe est le suivant :
     \item Le chemin est initialement masque avec \texttt{stroke-dashoffset} egal a la longueur totale
     \item \texttt{requestAnimationFrame} modifie la valeur a 0
     \item Le navigateur interpole et le chemin \og{}se dessine\fg{} progressivement
-    \item Une fois terminee, les cercles des points apparaissent avec une animation d'echelle
+    \item Une fois terminee, les cerclés des points apparaissent avec une animation d'echelle
 \end{enumerate}
 
 \newpage
@@ -705,16 +705,16 @@ applyPreset('London', 51.5085, -0.1257, 'United Kingdom',
             'New York', 40.7143, -74.006, 'United States')
 \end{lstlisting}
 
-Chaque preset definit les deux villes avec leurs coordonnees exactes et declenche \texttt{fetchComparisonDetails()}.
+Chaque preset definit les deux villes avec leurs coordonnees exactes et déclénche \texttt{fetchComparisonDetails()}.
 
 \subsubsection{Affichage des resultats}
 
 Les donnees sont presentees sous deux formes :
 
 \begin{enumerate}[nosep]
-    \item \textbf{Bandeau d'intelligence comparative} : affiche la difference de temperature entre les deux villes avec un message dynamique (\og{}plus chaud\fg{}, \og{}plus froid\fg{}, \og{}identique\fg{})
+    \item \textbf{Bandeau d'intelligence comparative} : affiche la difference de température entre les deux villes avec un message dynamique (\og{}plus chaud\fg{}, \og{}plus froid\fg{}, \og{}identique\fg{})
     \item \textbf{Tableau de comparaison} : un tableau HTML semantique (\texttt{<table>}) avec les colonnes \og{}Element atmospherique\fg{}, \og{}Ville A\fg{}, \og{}Ville B\fg{} et les lignes : Temperature, Ressenti, Condition, Humidite, Vent
-    \item \textbf{Cartes journalieres} : pour chaque jour, les temperatures max/min des deux villes sont affichees cote-a-cote avec un indicateur de difference
+    \item \textbf{Cartes journalieres} : pour chaque jour, les températures max/min des deux villes sont affichees cote-a-cote avec un indicateur de difference
 \end{enumerate}
 
 \newpage
@@ -722,7 +722,7 @@ Les donnees sont presentees sous deux formes :
 
 \subsubsection{Donnees}
 
-L'indice de qualite de l'air est recuperee via l'API Open-Meteo Air Quality. Cinq indicateurs sont affiches :
+L'indice de qualité de l'air est recuperee via l'API Open-Meteo Air Quality. Cinq indicateurs sont affiches :
 
 \begin{lstlisting}[style=angular, caption={Parametres AQI}]
 &current=european_aqi,us_aqi,pm2_5,pm10,ozone
@@ -770,7 +770,7 @@ Les donnees sont presentees dans une grille de 5 colonnes avec des cartes indivi
 
 \subsubsection{Gestion des favoris}
 
-Les favoris sont stockes dans \texttt{localStorage} sous la cle \texttt{meteo\_favorites}. La methode \texttt{toggleFavorite()} gere l'ajout et le retrait :
+Les favoris sont stockes dans \texttt{localStorage} sous la clé \texttt{meteo\_favorites}. La méthode \texttt{toggleFavorite()} gere l'ajout et le retrait :
 
 \begin{lstlisting}[style=angular, caption={Ajout/retrait d'un favori avec persistance}]
 toggleFavorite(city: City): void {
@@ -792,11 +792,11 @@ toggleFavorite(city: City): void {
 }
 \end{lstlisting}
 
-La deduplication par \texttt{id} ou par coordonnees permet d'eviter les doublons, meme si la meme ville est selectionnee via differents moyens (recherche, preset, geolocalisation).
+La deduplication par \texttt{id} ou par coordonnees permet d'eviter les doublons, meme si la meme ville est selectionnee via differents moyens (recherche, preset, géolocalisation).
 
 \subsubsection{Villes recentes}
 
-Les villes recentes sont stockees sous la cle \texttt{meteo\_recent\_searches} avec un maximum de 6 entrees. La methode \texttt{addToRecents()} :
+Les villes recentes sont stockées sous la clé \texttt{meteo\_recent\_searches} avec un maximum de 6 entrees. La méthode \texttt{addToRecents()} :
 
 \begin{enumerate}[nosep]
     \item Charge les recents depuis \texttt{localStorage}
@@ -806,13 +806,13 @@ Les villes recentes sont stockees sous la cle \texttt{meteo\_recent\_searches} a
     \item Persiste et met a jour le signal
 \end{enumerate}
 
-\subsection{Geolocalisation automatique}
+\subsection{Géolocalisation automatique}
 
 \subsubsection{Mecanisme}
 
-La fonctionnalite \og{}Detecter\fg{} utilise l'API Geolocation du navigateur combinee a un geocodage inverse via Nominatim (OpenStreetMap) :
+La fonctionnalité \og{}Détecter\fg{} utilise l'API Geolocation du navigateur combinée à un géocodage inverse via Nominatim (OpenStreetMap) :
 
-\begin{lstlisting}[style=angular, caption={Chaine complete de geolocalisation}]
+\begin{lstlisting}[style=angular, caption={Chaîne complète de géolocalisation}]
 triggerGeolocation(): Observable<City> {
   // 1. Obtenir la position via l'API navigateur
   return new Observable<GeolocationPosition>(observer => {
@@ -843,11 +843,11 @@ triggerGeolocation(): Observable<City> {
 }
 \end{lstlisting}
 
-\subsection{Bascule d'unite de temperature}
+\subsection{Bascule d'unite de température}
 
-Le signal \texttt{temperatureUnit} stocke l'unite courante (\texttt{'C'} ou \texttt{'F'}) et est persiste dans \texttt{localStorage}. La conversion est effectuee par une fonction pure :
+Le signal \texttt{températureUnit} stocke l'unite courante (\texttt{'C'} ou \texttt{'F'}) et est persiste dans \texttt{localStorage}. La conversion est effectuee par une fonction pure :
 
-\begin{lstlisting}[style=angular, caption={Conversion de temperature}]
+\begin{lstlisting}[style=angular, caption={Conversion de température}]
 export function convertTemp(celsius: number, unit: 'C' | 'F'): number {
   return unit === 'F'
     ? Math.round((celsius * 9) / 5 + 32)
@@ -859,7 +859,7 @@ export function formatTemp(celsius: number, unit: 'C' | 'F'): string {
 }
 \end{lstlisting}
 
-Tous les appels dans les templates utilisent \texttt{formatTemp(value, manager.temperatureUnit())}, garantissant une coherence dans toute l'application.
+Tous les appels dans les templates utilisent \texttt{formatTemp(value, manager.températureUnit())}, garantissant une coherence dans toute l'application.
 
 \subsection{Mode sombre}
 
@@ -879,7 +879,7 @@ applyDarkMode(): void {
 
 La configuration Tailwind declare une variante \texttt{dark} custom basee sur cette classe. Chaque composant adapte son apparence via les classes \texttt{dark:bg-slate-800}, \texttt{dark:text-white}, etc. La preference est persister dans \texttt{localStorage}.
 
-\subsection{Resume textuel (Weather Briefing)}
+\subsection{Résumé textuel (Weather Briefing)}
 
 Apres chaque selection de ville, le service appelle une route \texttt{/api/weather-briefing} via le serveur Express SSR. Cette route genere un court resume des conditions actuelles :
 
@@ -900,14 +900,14 @@ Cette approche permet de generer le texte cote serveur, ouvrant la possibilite d
 \section{Persistance des donnees}
 \label{sec:persist}
 
-L'application utilise le \texttt{localStorage} du navigateur pour maintenir les preferences et donnees utilisateur entre les sessions. Quatre cles sont persisteers :
+L'application utilise le \texttt{localStorage} du navigateur pour maintenir les preferences et donnees utilisateur entre les sessions. Quatre clés sont persisteers :
 
 \begin{table}[H]
 \centering
 \caption{Cles localStorage}
 \begin{tabular}{lll}
 \toprule
-\textbf{Cle} & \textbf{Valeur} & \textbf{Declencheur} \\
+\textbf{Cle} & \textbf{Valeur} & \textbf{Decléncheur} \\
 \midrule
 \texttt{meteo\_temp\_unit} & \texttt{'C'} ou \texttt{'F'} & Bascule d'unite \\
 \texttt{meteo\_dark\_mode} & \texttt{'true'} ou \texttt{'false'} & Bascule mode sombre \\
@@ -939,7 +939,7 @@ export const serverRoutes: ServerRoute[] = [
 ];
 \end{lstlisting}
 
-La route \texttt{forecast} utilise le rendu serveur dynamique car ses parametres (coordonnees de la ville) sont inconnus au moment du build. Les autres routes sont pre-generees a la compilation grace au \texttt{Prerender}.
+La route \texttt{forecast} utilise le rendu serveur dynamique car ses paramètres (coordonnees de la ville) sont inconnus au moment du build. Les autres routes sont pre-generees a la compilation grace au \texttt{Prerender}.
 
 % ──────────────────────────────────────────────────────────────────────
 \newpage
@@ -973,7 +973,7 @@ it('should search cities via geocoding API', () => {
 Les tests couvrent :
 \begin{itemize}[nosep]
     \item La creation des composants et du service
-    \item La bascule d'unite de temperature
+    \item La bascule d'unite de température
     \item Le mode sombre
     \item L'ajout et le retrait de favoris
     \item Le nettoyage des villes recentes
@@ -983,42 +983,96 @@ Les tests couvrent :
 
 % ──────────────────────────────────────────────────────────────────────
 \newpage
+\section{Demonstration}
+\label{sec:demo}
+
+\subsection{Page d'accueil et recherche}
+
+La figure~\ref{fig:dashboard} presente la page d'accueil avec le champ de recherche, les conditions actuelles et les prévisions horaires.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio]{images/dashboard.jpeg}
+\caption{Page d'accueil avec recherche et conditions actuelles}
+\label{fig:dashboard}
+\end{figure}
+
+La figure~\ref{fig:dashboard-suite} montre la suite de la page d'accueil avec le graphique des températures sur 5~jours et l'indice de qualité de l'air.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio]{images/dashboard-suite.jpeg}
+\caption{Graphique des températures et qualité de l'air}
+\label{fig:dashboard-suite}
+\end{figure}
+
+\subsection{Previsions detaillees}
+
+La figure~\ref{fig:forecast} illustre la page de previsions detaillees avec les informations completees (vent, humidité, pression).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio]{images/forecast.jpeg}
+\caption{Page de previsions detaillees}
+\label{fig:forecast}
+\end{figure}
+
+\subsection{Comparaison de villes}
+
+Les figures~\ref{fig:comparison} et~\ref{fig:comparison-suite} montrent la fonctionnalité de comparaison entre deux villes avec les cartes jour par jour et les indicateurs cote-a-cote.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio]{images/comparison.jpeg}
+\caption{Comparaison de deux villes (partie 1)}
+\label{fig:comparison}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio]{images/comparison-suite.jpeg}
+\caption{Comparaison de deux villes (partie 2)}
+\label{fig:comparison-suite}
+\end{figure}
+
+% ──────────────────────────────────────────────────────────────────────
+\newpage
 \section{Conclusion}
 \label{sec:concl}
 
 \subsection{Bilan technique}
 
-Ce projet a permis de mettre en oeuvre l'ensemble des concepts fondamentaux d'Angular 21 :
+Ce projet a permis de mettre en œuvre l'ensemble des concepts fondamentaux d'Angular 21 :
 
 \begin{itemize}[nosep]
     \item \textbf{Architecture standalone} : composants, routes et configuration sans \texttt{NgModules}
-    \item \textbf{Gestion d'etat reactive} : \texttt{signal()}, \texttt{computed()}, detection \texttt{OnPush}
-    \item \textbf{Formulaires reactifs} : \texttt{FormControl}, debounce, \texttt{switchMap}
+    \item \textbf{Gestion d'état reactive} : \texttt{signal()}, \texttt{computed()}, detection \texttt{OnPush}
+    \item \textbf{Formulaires réactifs} : \texttt{FormControl}, debounce, \texttt{switchMap}
     \item \textbf{HTTP et RxJS} : \texttt{HttpClient}, \texttt{forkJoin}, \texttt{catchError}
-    \item \textbf{Routage} : routes parametrees, \texttt{ActivatedRoute}, navigation
+    \item \textbf{Routage} : routes paramètrees, \texttt{ActivatedRoute}, navigation
     \item \textbf{SSR} : rendu serveur avec Express, modes Server et Prerender
     \item \textbf{Animations SVG} : calcul de coordonnees, \texttt{stroke-dasharray}, \texttt{requestAnimationFrame}
     \item \textbf{Persistance} : \texttt{localStorage} avec protection SSR
     \item \textbf{Tests} : Vitest, \texttt{HttpTestingController}
-    \item \textbf{Integration API} : trois API REST externes orchestrees
+    \item \textbf{Intégration API} : trois API REST externes orchestrées
 \end{itemize}
 
-\subsection{Defis techniques}
+\subsection{Défis techniques}
 
-Les principaux defis rencontres incluent :
+Les principaux défis rencontres incluent :
 \begin{itemize}[nosep]
-    \item La coordination des appels API paralleles avec \texttt{forkJoin}
+    \item La coordination des appels API parallèles avec \texttt{forkJoin}
     \item L'animation du graphique SVG sans bibliotheque externe
-    \item La gestion des etats de chargement, d'erreur et de donnees vides (skeleton, erreur, contenu)
-    \item La synchronisation des etats entre les composants via le service partage
-    \item Le rendu SSR avec des parametres de route dynamiques
+    \item La gestion des états de chargement, d'erreur et de donnees vides (skeleton, erreur, contenu)
+    \item La synchronisation des états entre les composants via le service partage
+    \item Le rendu SSR avec des paramètres de route dynamiques
 \end{itemize}
 
 \subsection{Perspectives}
 
-Plusieurs ameliorations pourraient etre apportees :
+Plusieurs améliorations pourraient être apportées :
 \begin{itemize}[nosep]
-    \item Graphiques supplementaires (precipitations, vent, pression atmospherique)
+    \item Graphiques supplémentaires (précipitations, vent, pression atmosphérique)
     \item Internationalisation (i18n) avec \texttt{@angular/localize}
     \item Progressive Web App (PWA) avec \texttt{@angular/pwa}
     \item Tests de bout en bout avec Cypress ou Playwright
