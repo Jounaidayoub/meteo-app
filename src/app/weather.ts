@@ -1,6 +1,6 @@
-import {Injectable, inject, signal} from '@angular/core';
+import {Injectable, inject, signal, computed} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, of, throwError} from 'rxjs';
+import {Observable, of, throwError, forkJoin} from 'rxjs';
 import {map, catchError, switchMap} from 'rxjs/operators';
 
 export interface City {
@@ -22,6 +22,14 @@ export interface CurrentWeather {
   time: string;
 }
 
+export interface HourlyForecast {
+  time: string;
+  temperature: number;
+  precipitationProbability: number;
+  weatherCode: number;
+  windSpeed: number;
+}
+
 export interface DailyForecast {
   date: string;
   tempMax: number;
@@ -31,12 +39,25 @@ export interface DailyForecast {
   precipitation: number;
   weatherCode: number;
   windSpeedMax: number;
+  sunrise: string;
+  sunset: string;
+  uvIndex: number;
+}
+
+export interface AirQuality {
+  europeanAqi: number | null;
+  usAqi: number | null;
+  pm25: number | null;
+  pm10: number | null;
+  ozone: number | null;
 }
 
 export interface WeatherData {
   city: City;
   current: CurrentWeather;
   forecast: DailyForecast[];
+  hourly: HourlyForecast[];
+  airQuality: AirQuality | null;
 }
 
 export interface SearchResultItem {
@@ -67,6 +88,16 @@ export interface OpenMeteoResponse {
     precipitation_sum: number[];
     weather_code: number[];
     wind_speed_10m_max: number[];
+    sunrise: string[];
+    sunset: string[];
+    uv_index_max: number[];
+  };
+  hourly: {
+    time: string[];
+    temperature_2m: number[];
+    precipitation_probability: number[];
+    weather_code: number[];
+    wind_speed_10m: number[];
   };
 }
 
@@ -80,7 +111,15 @@ export interface WeatherCondition {
   isSnow: boolean;
 }
 
-// Maps WMO codes to clear, expressive statuses and icons
+export function convertTemp(celsius: number, unit: 'C' | 'F'): number {
+  if (unit === 'F') return Math.round((celsius * 9) / 5 + 32);
+  return Math.round(celsius);
+}
+
+export function formatTemp(celsius: number, unit: 'C' | 'F'): string {
+  return `${convertTemp(celsius, unit)}°${unit}`;
+}
+
 export function getWeatherCondition(code: number): WeatherCondition {
   switch (code) {
     case 0:
@@ -241,13 +280,51 @@ export function getWeatherCondition(code: number): WeatherCondition {
   }
 }
 
+interface NominatimResponse {
+  address?: {
+    city?: string;
+    town?: string;
+    village?: string;
+    municipality?: string;
+    country?: string;
+    country_code?: string;
+    state?: string;
+  };
+}
+
+interface AqiApiResponse {
+  current?: {
+    european_aqi?: number;
+    us_aqi?: number;
+    pm2_5?: number;
+    pm10?: number;
+    ozone?: number;
+  };
+}
+
+export function getAQIInfo(aqi: number | null): { label: string; color: string; level: number } {
+  if (aqi === null || aqi === undefined) return { label: 'No data', color: 'text-slate-400', level: 0 };
+  if (aqi <= 20) return { label: 'Good', color: 'text-green-500', level: 1 };
+  if (aqi <= 40) return { label: 'Fair', color: 'text-lime-500', level: 2 };
+  if (aqi <= 60) return { label: 'Moderate', color: 'text-yellow-500', level: 3 };
+  if (aqi <= 80) return { label: 'Poor', color: 'text-orange-500', level: 4 };
+  return { label: 'Very Poor', color: 'text-red-500', level: 5 };
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class WeatherManager {
   private http = inject(HttpClient);
 
-  // Core signals for state management
+  readonly temperatureUnit = signal<'C' | 'F'>(
+    (typeof localStorage !== 'undefined' ? localStorage.getItem('meteo_temp_unit') as 'C' | 'F' : null) || 'C'
+  );
+
+  readonly isDarkMode = signal<boolean>(
+    typeof localStorage !== 'undefined' ? localStorage.getItem('meteo_dark_mode') === 'true' : false
+  );
+
   readonly currentCity = signal<City>({
     id: 2643743,
     name: 'London',
@@ -261,23 +338,75 @@ export class WeatherManager {
   readonly isLoading = signal<boolean>(false);
   readonly errorMsg = signal<string | null>(null);
 
-  // Recent/Favorite Cities list managed via localStorage
   readonly recentSearches = signal<City[]>(this.loadRecents());
   readonly favoriteCities = signal<City[]>(this.loadFavorites());
 
-  // Comparison State
   readonly compareCityA = signal<City | null>(null);
   readonly compareCityB = signal<City | null>(null);
   readonly compareDataA = signal<WeatherData | null>(null);
   readonly compareDataB = signal<WeatherData | null>(null);
   readonly isComparingLoading = signal<boolean>(false);
 
+  readonly aiSummary = signal<string | null>(null);
+  readonly isAiLoading = signal<boolean>(false);
+
+  readonly chartData = computed(() => {
+    const data = this.weatherData();
+    if (!data) return null;
+    return this.computeChartCoordinates(data.forecast);
+  });
+
   constructor() {
-    // Load default weather on startup
     this.selectCity(this.currentCity());
   }
 
-  // Geocoding API search - suggestions
+  fetchAiBriefing(cityName: string, temp: number, condition: string): Observable<string> {
+    return this.http.get<{summary: string}>('/api/weather-briefing', {
+      params: {city: cityName, temp: String(temp), condition},
+    }).pipe(
+      map(r => r.summary),
+      catchError(() => of(`Currently ${temp}°C with ${condition} in ${cityName}.`))
+    );
+  }
+
+  loadAiBriefing(): void {
+    const data = this.weatherData();
+    if (!data || typeof window === 'undefined') return;
+    this.isAiLoading.set(true);
+    this.fetchAiBriefing(
+      data.city.name,
+      data.current.temperature,
+      getWeatherCondition(data.current.weatherCode).label,
+    ).subscribe({
+      next: (summary) => {
+        this.aiSummary.set(summary);
+        this.isAiLoading.set(false);
+      },
+      error: () => this.isAiLoading.set(false),
+    });
+  }
+
+  toggleTemperatureUnit(): void {
+    this.temperatureUnit.update(u => u === 'C' ? 'F' : 'C');
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('meteo_temp_unit', this.temperatureUnit());
+    }
+  }
+
+  toggleDarkMode(): void {
+    this.isDarkMode.update(d => !d);
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('meteo_dark_mode', String(this.isDarkMode()));
+    }
+    this.applyDarkMode();
+  }
+
+  applyDarkMode(): void {
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.toggle('dark', this.isDarkMode());
+    }
+  }
+
   searchCities(query: string): Observable<City[]> {
     if (!query || query.trim().length < 2) {
       return of([]);
@@ -285,9 +414,7 @@ export class WeatherManager {
     const cleanUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=10&language=en&format=json`;
     return this.http.get<{results?: SearchResultItem[]}>(cleanUrl).pipe(
       map(response => {
-        if (!response.results) {
-          return [];
-        }
+        if (!response.results) return [];
         return response.results.map(item => ({
           id: item.id,
           name: item.name,
@@ -302,52 +429,104 @@ export class WeatherManager {
     );
   }
 
-  // Fetch weather for a given city
-  configWeather(city: City): Observable<WeatherData> {
-    const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${city.latitude}&longitude=${city.longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum,wind_speed_10m_max&timezone=auto`;
-
-    return this.http.get<OpenMeteoResponse>(forecastUrl).pipe(
+  reverseGeocode(lat: number, lon: number): Observable<City> {
+    const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1`;
+    return this.http.get<NominatimResponse>(url, { headers: { 'Accept-Language': 'en' } }).pipe(
       map(res => {
+        const addr = res.address || {};
+        return {
+          id: Math.abs(Math.round(lat * 1000) + Math.round(lon * 1000)),
+          name: addr.city || addr.town || addr.village || addr.municipality || 'Unknown',
+          latitude: lat,
+          longitude: lon,
+          country: addr.country || '',
+          country_code: addr.country_code?.toUpperCase() || '',
+          admin1: addr.state || '',
+        };
+      }),
+      catchError(() => of({
+        id: Math.abs(Math.round(lat * 1000) + Math.round(lon * 1000)),
+        name: 'Current Location',
+        latitude: lat,
+        longitude: lon,
+        country: 'GPS Location',
+        country_code: 'GPS',
+      }))
+    );
+  }
+
+  configWeather(city: City): Observable<WeatherData> {
+    const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${city.latitude}&longitude=${city.longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum,wind_speed_10m_max,sunrise,sunset,uv_index_max&hourly=temperature_2m,precipitation_probability,weather_code,wind_speed_10m&timezone=auto&forecast_days=5`;
+    const aqiUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${city.latitude}&longitude=${city.longitude}&current=european_aqi,us_aqi,pm2_5,pm10,ozone`;
+
+    return forkJoin({
+      weather: this.http.get<OpenMeteoResponse>(forecastUrl),
+      aqi: this.http.get<AqiApiResponse>(aqiUrl).pipe(catchError(() => of(null))),
+    }).pipe(
+      map(({weather, aqi}) => {
         const currentData: CurrentWeather = {
-          temperature: res.current.temperature_2m,
-          feelsLike: res.current.apparent_temperature,
-          humidity: res.current.relative_humidity_2m,
-          windSpeed: res.current.wind_speed_10m,
-          weatherCode: res.current.weather_code,
-          time: res.current.time,
+          temperature: weather.current.temperature_2m,
+          feelsLike: weather.current.apparent_temperature,
+          humidity: weather.current.relative_humidity_2m,
+          windSpeed: weather.current.wind_speed_10m,
+          weatherCode: weather.current.weather_code,
+          time: weather.current.time,
         };
 
         const dailyList: DailyForecast[] = [];
-        const times: string[] = res.daily.time;
-        // Limit to 5 days of forecast as requested
+        const times: string[] = weather.daily.time;
         const daysToMap = Math.min(times.length, 5);
 
         for (let i = 0; i < daysToMap; i++) {
           dailyList.push({
             date: times[i],
-            tempMax: res.daily.temperature_2m_max[i],
-            tempMin: res.daily.temperature_2m_min[i],
-            apparentMax: res.daily.apparent_temperature_max[i],
-            apparentMin: res.daily.apparent_temperature_min[i],
-            precipitation: res.daily.precipitation_sum[i],
-            weatherCode: res.daily.weather_code[i],
-            windSpeedMax: res.daily.wind_speed_10m_max[i],
+            tempMax: weather.daily.temperature_2m_max[i],
+            tempMin: weather.daily.temperature_2m_min[i],
+            apparentMax: weather.daily.apparent_temperature_max[i],
+            apparentMin: weather.daily.apparent_temperature_min[i],
+            precipitation: weather.daily.precipitation_sum[i],
+            weatherCode: weather.daily.weather_code[i],
+            windSpeedMax: weather.daily.wind_speed_10m_max[i],
+            sunrise: weather.daily.sunrise?.[i] || '',
+            sunset: weather.daily.sunset?.[i] || '',
+            uvIndex: weather.daily.uv_index_max?.[i] ?? 0,
           });
         }
 
-        return {
-          city,
-          current: currentData,
-          forecast: dailyList,
-        };
+        const hourlyList: HourlyForecast[] = [];
+        const hourTimes: string[] = weather.hourly?.time || [];
+        const hoursToMap = Math.min(hourTimes.length, 24);
+
+        for (let i = 0; i < hoursToMap; i++) {
+          hourlyList.push({
+            time: hourTimes[i],
+            temperature: weather.hourly.temperature_2m[i],
+            precipitationProbability: weather.hourly.precipitation_probability[i],
+            weatherCode: weather.hourly.weather_code[i],
+            windSpeed: weather.hourly.wind_speed_10m[i],
+          });
+        }
+
+        let airQuality: AirQuality | null = null;
+        if (aqi?.current) {
+          airQuality = {
+            europeanAqi: aqi.current.european_aqi ?? null,
+            usAqi: aqi.current.us_aqi ?? null,
+            pm25: aqi.current.pm2_5 ?? null,
+            pm10: aqi.current.pm10 ?? null,
+            ozone: aqi.current.ozone ?? null,
+          };
+        }
+
+        return { city, current: currentData, forecast: dailyList, hourly: hourlyList, airQuality };
       })
     );
   }
 
-  // Trigger main dashboard city switch
   selectCity(city: City): void {
     this.isLoading.set(true);
     this.errorMsg.set(null);
+    this.aiSummary.set(null);
     this.currentCity.set(city);
 
     this.configWeather(city).subscribe({
@@ -355,6 +534,7 @@ export class WeatherManager {
         this.weatherData.set(data);
         this.isLoading.set(false);
         this.addToRecents(city);
+        this.loadAiBriefing();
       },
       error: (err) => {
         console.error(err);
@@ -364,29 +544,21 @@ export class WeatherManager {
     });
   }
 
-  // Fetch data specifically for comparison
   fetchComparisonDetails(): void {
     const cityA = this.compareCityA();
     const cityB = this.compareCityB();
-
     if (!cityA || !cityB) return;
 
     this.isComparingLoading.set(true);
-    
-    // Call both endpoints sequentially or concurrently
-    this.configWeather(cityA).subscribe({
-      next: (dataA) => {
+
+    forkJoin({
+      dataA: this.configWeather(cityA),
+      dataB: this.configWeather(cityB),
+    }).subscribe({
+      next: ({dataA, dataB}) => {
         this.compareDataA.set(dataA);
-        this.configWeather(cityB).subscribe({
-          next: (dataB) => {
-            this.compareDataB.set(dataB);
-            this.isComparingLoading.set(false);
-          },
-          error: (err) => {
-            console.error(err);
-            this.isComparingLoading.set(false);
-          }
-        });
+        this.compareDataB.set(dataB);
+        this.isComparingLoading.set(false);
       },
       error: (err) => {
         console.error(err);
@@ -395,7 +567,6 @@ export class WeatherManager {
     });
   }
 
-  // Geolocation trigger
   triggerGeolocation(): Observable<City> {
     if (typeof window === 'undefined' || !window.navigator.geolocation) {
       return throwError(() => new Error('Geolocation is not supported by your browser.'));
@@ -403,35 +574,15 @@ export class WeatherManager {
 
     return new Observable<GeolocationPosition>(observer => {
       window.navigator.geolocation.getCurrentPosition(
-        position => {
-          observer.next(position);
-          observer.complete();
-        },
-        error => {
-          observer.error(error);
-        },
+        position => { observer.next(position); observer.complete(); },
+        error => { observer.error(error); },
         { enableHighAccuracy: true, timeout: 8000 }
       );
     }).pipe(
-      switchMap(position => {
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-        // Search the closest city name using Geocoding API by coordinates reverse lookup or reverse-lookup Open-Meteo endpoint
-        // Open-Meteo doesn't have direct reverse geocoding API, but we can display it as "My Location" or do a simple fetch to a free reverse geocoder
-        const locCity: City = {
-          id: -999, // Custom flag for GPS
-          name: 'Current Location',
-          latitude: Number(lat.toFixed(4)),
-          longitude: Number(lon.toFixed(4)),
-          country: 'GPS Location',
-          country_code: 'GPS',
-        };
-        return of(locCity);
-      })
+      switchMap(position => this.reverseGeocode(position.coords.latitude, position.coords.longitude))
     );
   }
 
-  // Local Recents Helpers
   private loadRecents(): City[] {
     if (typeof localStorage === 'undefined') return [];
     try {
@@ -445,10 +596,8 @@ export class WeatherManager {
   private addToRecents(city: City): void {
     if (typeof localStorage === 'undefined') return;
     let list = this.loadRecents();
-    // Filter duplicates
     list = list.filter(item => item.id !== city.id && !(item.latitude === city.latitude && item.longitude === city.longitude));
     list.unshift(city);
-    // Keep max 6 cities
     list = list.slice(0, 6);
     this.recentSearches.set(list);
     try {
@@ -465,7 +614,6 @@ export class WeatherManager {
     this.recentSearches.set([]);
   }
 
-  // Favorites Helpers
   private loadFavorites(): City[] {
     if (typeof localStorage === 'undefined') return [];
     try {
@@ -501,5 +649,82 @@ export class WeatherManager {
 
   isFavorite(city: City): boolean {
     return this.favoriteCities().some(item => item.id === city.id || (item.latitude === city.latitude && item.longitude === city.longitude));
+  }
+
+  getDayOfWeek(dateStr: string): string {
+    if (!dateStr) return '';
+    try {
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      return days[new Date(dateStr).getDay()];
+    } catch {
+      return dateStr;
+    }
+  }
+
+  formatDateFormatted(dateStr: string): string {
+    if (!dateStr) return '';
+    try {
+      return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    } catch {
+      return dateStr;
+    }
+  }
+
+  formatTime(timeStr: string): string {
+    if (!timeStr) return '';
+    try {
+      return new Date(timeStr).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    } catch {
+      return timeStr;
+    }
+  }
+
+  formatHour(timeStr: string): string {
+    if (!timeStr) return '';
+    try {
+      return new Date(timeStr).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true });
+    } catch {
+      return timeStr;
+    }
+  }
+
+  private computeChartCoordinates(list: DailyForecast[]) {
+    const width = 600;
+    const height = 240;
+    const paddingX = 50;
+    const paddingY = 40;
+
+    const count = list.length;
+    const xSpace = (width - paddingX * 2) / (count - 1);
+
+    const maxTempVals = list.map(d => d.tempMax);
+    const minTempVals = list.map(d => d.tempMin);
+
+    const globalMax = Math.max(...maxTempVals);
+    const globalMin = Math.min(...minTempVals);
+    let span = globalMax - globalMin;
+    if (span === 0) span = 1;
+
+    const pointsMax = list.map((d, i) => {
+      const x = paddingX + i * xSpace;
+      const y = height - paddingY - ((d.tempMax - globalMin) / span) * (height - paddingY * 2);
+      const label = this.getDayOfWeek(d.date).slice(0, 3);
+      return { x, y, val: d.tempMax, label };
+    });
+
+    const pointsMin = list.map((d, i) => {
+      const x = paddingX + i * xSpace;
+      const y = height - paddingY - ((d.tempMin - globalMin) / span) * (height - paddingY * 2);
+      const label = this.getDayOfWeek(d.date).slice(0, 3);
+      return { x, y, val: d.tempMin, label };
+    });
+
+    const lineMax = pointsMax.reduce((p, pt, i) => i === 0 ? `M ${pt.x} ${pt.y}` : `${p} L ${pt.x} ${pt.y}`, '');
+    const lineMin = pointsMin.reduce((p, pt, i) => i === 0 ? `M ${pt.x} ${pt.y}` : `${p} L ${pt.x} ${pt.y}`, '');
+
+    const pathMaxArea = `${lineMax} L ${pointsMax[count - 1].x} ${height - paddingY} L ${pointsMax[0].x} ${height - paddingY} Z`;
+    const pathMinArea = `${lineMin} L ${pointsMin[count - 1].x} ${height - paddingY} L ${pointsMin[0].x} ${height - paddingY} Z`;
+
+    return { pointsMax, pointsMin, lineMax, lineMin, pathMaxArea, pathMinArea };
   }
 }

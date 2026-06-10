@@ -12,21 +12,6 @@ const browserDistFolder = join(import.meta.dirname, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
-
-/**
- * Serve static files from /browser
- */
 app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',
@@ -35,9 +20,38 @@ app.use(
   }),
 );
 
-/**
- * Handle all other requests by rendering the Angular application.
- */
+app.get('/api/weather-briefing', async (req, res) => {
+  const cityName = req.query['city'] || 'this location';
+  const temperature = req.query['temp'] || '';
+  const condition = req.query['condition'] || '';
+
+  try {
+    const {GoogleGenAI} = await import('@google/genai');
+    const apiKey = process.env['GEMINI_API_KEY'];
+
+    if (!apiKey) {
+      res.json({
+        summary: `Currently ${temperature}°C with ${condition} in ${cityName}.`,
+      });
+      return;
+    }
+
+    const ai = new GoogleGenAI({apiKey});
+    const prompt = `Generate a very short (1-2 sentences) friendly weather briefing for ${cityName}. Current conditions: ${temperature}°C, ${condition}. Keep it conversational and under 30 words.`;
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.0-flash',
+      contents: prompt,
+    });
+
+    res.json({summary: response.text || `Currently ${temperature}°C with ${condition} in ${cityName}.`});
+  } catch {
+    res.json({
+      summary: `Currently ${temperature}°C with ${condition} in ${cityName}.`,
+    });
+  }
+});
+
 app.use((req, res, next) => {
   angularApp
     .handle(req)
@@ -47,22 +61,12 @@ app.use((req, res, next) => {
     .catch(next);
 });
 
-/**
- * Start the server if this module is the main entry point, or it is ran via PM2.
- * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
- */
 if (isMainModule(import.meta.url) || process.env['pm_id']) {
   const port = process.env['PORT'] || 4000;
   app.listen(port, (error) => {
-    if (error) {
-      throw error;
-    }
-
+    if (error) throw error;
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }
 
-/**
- * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
- */
 export const reqHandler = createNodeRequestHandler(app);
